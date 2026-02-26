@@ -1,24 +1,39 @@
 <?php
 
-use App\Livewire\Counter;
+use App\Http\Controllers\SertifikatController;
+use App\Livewire\Auths;
+use App\Livewire\Batches;
+use App\Livewire\Home;
+use App\Livewire\Pesertas;
+use App\Livewire\Sertifikats;
 use App\Livewire\Users;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-Route::get('/counter', Counter::class);
-// Route::get('/users', Users::class);
-
-Route::get('/users', function () {
-    return view('users');
-})->name('users');
 
 
+// Protected routes (require authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/', Home::class)->name('home');
+    Route::get('/sertifikat', Sertifikats::class)->name('sertifikat');
+    Route::get('/batch', Batches::class)->name('batch');
+    Route::get('/peserta', Pesertas::class)->name('peserta');
 
-// Auth Login Page Warga
-Route::get('/auth', function () {
-    return view('login.index');
-})->middleware('guest')->name('auth.index');
+    // Logout route
+    Route::post('/logout', function () {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
+    })->name('logout');
+});
+
+// Super Admin only routes
+Route::middleware(['auth', 'superadmin'])->group(function () {
+    Route::get('/users', Users::class)->name('users');
+});
+
+// Guest routes (accessible without auth)
+Route::get('/auth', Auths::class)->name('login')->middleware('guest');
+Route::get('/sertifikat/{no_sertifikat}/download', [SertifikatController::class, 'download'])->name('sertifikat.download');

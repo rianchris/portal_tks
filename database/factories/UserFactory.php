@@ -24,21 +24,21 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'role_id' => fake()->randomElement([1, 2]),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'name' => fake()->name(),
+            'avatar' => 'https://picsum.photos/id/' . rand(1, 100) . '/300/300',
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Inject nama user tertentu
      */
-    public function unverified(): static
+    public function withName(string $name): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+        return $this->state(fn(array $attributes) => [
+            'name' => $name,
         ]);
     }
 }
