@@ -21,7 +21,7 @@
         @endauth
         {{ $slot }}
     </div>
-    @livewireScripts(['asset_url' => 'https://white-dinosaur-290588.hostingersite.com/portal'])
+    {{-- @livewireScripts(['asset_url' => 'http://127.0.0.1:as/vendor/livewire/livewire.js']) --}}
 </body>
 
 </html>
