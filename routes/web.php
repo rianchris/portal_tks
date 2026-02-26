@@ -15,7 +15,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 // Protected routes (require authentication)
 Route::middleware('auth')->group(function () {
-    Route::get('/', Home::class)->name('home');
+    Route::get('/home', Home::class)->name('home');
     Route::get('/sertifikat', Sertifikats::class)->name('sertifikat');
     Route::get('/batch', Batches::class)->name('batch');
     Route::get('/peserta', Pesertas::class)->name('peserta');
@@ -35,5 +35,5 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
 });
 
 // Guest routes (accessible without auth)
-Route::get('/auth', Auths::class)->name('login')->middleware('guest');
+Route::get('/', Auths::class)->name('login')->middleware('guest');
 Route::get('/sertifikat/{no_sertifikat}/download', [SertifikatController::class, 'download'])->name('sertifikat.download');

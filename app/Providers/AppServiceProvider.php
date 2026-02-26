@@ -23,7 +23,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->configureDefaults();
+        // Definisikan base URL project Anda
+        $baseUrl = 'https://white-dinosaur-290588.hostingersite.com/portal';
+
+        \Livewire\Livewire::setUpdateRoute(function ($handle) use ($baseUrl) {
+            return \Illuminate\Support\Facades\Route::post($baseUrl . '/livewire/update', $handle);
+        });
+
+        \Livewire\Livewire::setScriptRoute(function ($handle) use ($baseUrl) {
+            return \Illuminate\Support\Facades\Route::get($baseUrl . '/livewire/livewire.js', $handle);
+        });
     }
 
     protected function configureDefaults(): void
@@ -34,14 +43,15 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
+                ? Password::min(12)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
                 ->uncompromised()
-            : null
+                : null
         );
     }
 }

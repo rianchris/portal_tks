@@ -196,4 +196,6 @@ return [
     */
 
     'release_token' => 'a',
+
+    'asset_url' => '/portal',
 ];

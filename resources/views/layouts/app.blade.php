@@ -10,7 +10,6 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=montserrat:400" rel="stylesheet" />
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -22,6 +21,7 @@
         @endauth
         {{ $slot }}
     </div>
+    @livewireScripts(['asset_url' => 'https://white-dinosaur-290588.hostingersite.com/portal'])
 </body>
 
 </html>

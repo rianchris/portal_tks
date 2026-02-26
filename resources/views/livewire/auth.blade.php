@@ -9,7 +9,7 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Sign in to your account
                     </h1>
-                    <form wire:submit='login' class="space-y-4 md:space-y-6">
+                    <form wire:submit.prevent='login' class="space-y-4 md:space-y-6">
                         @csrf
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
