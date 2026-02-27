@@ -24,17 +24,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (app()->environment('local')) {
-            // Biarkan default, jangan setUpdateRoute secara manual
             $this->configureDefaults();
         } else {
-            // Ini hanya untuk produksi di Hostinger
             $baseUrl = 'https://white-dinosaur-290588.hostingersite.com/portal';
 
-            \Livewire\Livewire::setUpdateRoute(function ($handle) use ($baseUrl) {
+            // PENTING: Paksa Laravel menggunakan URL ini untuk semua pembuatan link & signature
+            \Illuminate\Support\Facades\URL::forceRootUrl($baseUrl);
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+
+            \Livewire\Livewire::setUpdateRoute(function ($handle) {
                 return \Illuminate\Support\Facades\Route::post('/portal/livewire/update', $handle);
             });
 
-            \Livewire\Livewire::setScriptRoute(function ($handle) use ($baseUrl) {
+            \Livewire\Livewire::setScriptRoute(function ($handle) {
                 return \Illuminate\Support\Facades\Route::get('/portal/livewire/livewire.js', $handle);
             });
         }
