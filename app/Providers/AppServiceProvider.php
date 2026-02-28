@@ -40,9 +40,9 @@ class AppServiceProvider extends ServiceProvider
             });
 
             // TAMBAHKAN INI: Agar rute preview file juga melewati jalur /portal
-            \Livewire\Livewire::setPreviewRoute(function ($handle) {
-                return \Illuminate\Support\Facades\Route::get('/portal/livewire/preview-file/{filename}', $handle);
-            });
+            // \Livewire\Livewire::setPreviewRoute(function ($handle) {
+            //     return \Illuminate\Support\Facades\Route::get('/portal/livewire/preview-file/{filename}', $handle);
+            // });
         }
     }
 
