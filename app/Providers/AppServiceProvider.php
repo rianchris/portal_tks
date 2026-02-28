@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
         } else {
             $baseUrl = 'https://white-dinosaur-290588.hostingersite.com/portal';
 
-            // PENTING: Paksa Laravel menggunakan URL ini untuk semua pembuatan link & signature
             \Illuminate\Support\Facades\URL::forceRootUrl($baseUrl);
             \Illuminate\Support\Facades\URL::forceScheme('https');
 
@@ -38,6 +37,11 @@ class AppServiceProvider extends ServiceProvider
 
             \Livewire\Livewire::setScriptRoute(function ($handle) {
                 return \Illuminate\Support\Facades\Route::get('/portal/livewire/livewire.js', $handle);
+            });
+
+            // TAMBAHKAN INI: Agar rute preview file juga melewati jalur /portal
+            \Livewire\Livewire::setPreviewRoute(function ($handle) {
+                return \Illuminate\Support\Facades\Route::get('/portal/livewire/preview-file/{filename}', $handle);
             });
         }
     }
