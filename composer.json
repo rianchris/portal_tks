@@ -72,7 +72,8 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "sed -i 's/abort_unless(request()->hasValidSignature(), 401);/abort_unless(auth()->check(), 401);/' vendor/livewire/livewire/src/Features/SupportFileUploads/FilePreviewController.php"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

@@ -13,6 +13,12 @@ use Laravel\Socialite\Facades\Socialite;
 
 
 
+Route::get('/livewire/preview-file/{filename}', [
+    \App\Http\Controllers\LivewireFilePreviewController::class,
+    'handle'
+])->middleware(['web', 'auth']);
+
+
 // Protected routes (require authentication)
 Route::middleware('auth')->group(function () {
     Route::get('/home', Home::class)->name('home');
