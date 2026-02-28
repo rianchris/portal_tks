@@ -16,7 +16,7 @@ use Laravel\Socialite\Facades\Socialite;
 Route::get('/livewire/preview-file/{filename}', [
     \App\Http\Controllers\LivewireFilePreviewController::class,
     'handle'
-])->middleware(['web', 'auth']);
+])->middleware(['web', 'auth'])->name('livewire.preview-file');;
 
 
 // Protected routes (require authentication)
