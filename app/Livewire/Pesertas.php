@@ -84,7 +84,12 @@ class Pesertas extends Component
 
             // Update foto jika ada file baru
             if ($this->foto) {
+                if ($peserta->foto) {
+                    Storage::disk('public')->delete($peserta->foto); // ✅ hapus foto lama
+                }
                 $validated['foto'] = $this->foto->store('foto', 'public');
+            } else {
+                unset($validated['foto']); // ✅ jaga foto lama jika tidak upload baru
             }
 
             $peserta->update($validated);
@@ -151,6 +156,7 @@ class Pesertas extends Component
         $this->editingPesertaId = null;
         $this->oldFoto = null;
         $this->isEditing = false;
+        $this->batches = []; // ✅ tambahkan ini
         $this->reset(['nik', 'nama', 'email', 'telepon', 'tempat_lahir', 'tanggal_lahir', 'foto', 'sertifikat_id', 'batch_id', 'no_sertifikat']);
     }
 
@@ -186,8 +192,37 @@ class Pesertas extends Component
 
     public function deletePeserta($pesertaId)
     {
-        Peserta::findOrFail($pesertaId)->delete();
+        $peserta = Peserta::findOrFail($pesertaId);
+
+        if ($peserta->foto) {
+            Storage::disk('public')->delete($peserta->foto);
+        }
+        if ($peserta->qr_code) {
+            Storage::disk('public')->delete($peserta->qr_code);
+        }
+
+        $peserta->delete();
         session()->flash('success', 'Peserta deleted successfully!');
+    }
+
+    private function resetForm()
+    {
+        $this->reset([
+            'nik',
+            'nama',
+            'email',
+            'telepon',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'foto',
+            'sertifikat_id',
+            'batch_id',
+            'no_sertifikat'
+        ]);
+        $this->batches = [];
+        $this->isEditing = false;
+        $this->editingPesertaId = null;
+        $this->oldFoto = null;
     }
 
     public function render()

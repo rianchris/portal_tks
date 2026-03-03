@@ -24,7 +24,7 @@
                         <div>
                             <label for="nik" class="block text-sm/6 font-medium text-gray-900">NIK</label>
                             <div class="mt-2">
-                                <input wire:model="nik" id="nik" type="number" name="nik" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="nik" id="nik" type="number" name="nik" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('nik')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -33,7 +33,7 @@
                         <div class="mt-5">
                             <label for="nama" class="block text-sm/6 font-medium text-gray-900">Nama</label>
                             <div class="mt-2">
-                                <input wire:model="nama" id="nama" type="text" name="nama" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="nama" id="nama" type="text" name="nama" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('nama')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -42,7 +42,7 @@
                         <div class="mt-5">
                             <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
                             <div class="mt-2">
-                                <input wire:model="email" id="email" type="email" name="email" required autocomplete="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="email" id="email" type="email" name="email" autocomplete="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('email')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -53,7 +53,7 @@
                         <div class="mt-5">
                             <label for="telepon" class="block text-sm/6 font-medium text-gray-900">Telepon</label>
                             <div class="mt-2">
-                                <input wire:model="telepon" id="telepon" type="number" name="telepon" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="telepon" id="telepon" type="number" name="telepon" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('telepon')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -62,7 +62,7 @@
                         <div class="mt-5">
                             <label for="tempat_lahir" class="block text-sm/6 font-medium text-gray-900">Tempat Lahir</label>
                             <div class="mt-2">
-                                <input wire:model="tempat_lahir" id="tempat_lahir" type="text" name="tempat_lahir" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="tempat_lahir" id="tempat_lahir" type="text" name="tempat_lahir" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('tempat_lahir')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -71,7 +71,7 @@
                         <div class="mt-5">
                             <label for="tanggal_lahir" class="block text-sm/6 font-medium text-gray-900">Tanggal Lahir</label>
                             <div class="mt-2">
-                                <input wire:model="tanggal_lahir" id="tanggal_lahir" type="date" name="tanggal_lahir" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="tanggal_lahir" id="tanggal_lahir" type="date" name="tanggal_lahir" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('tanggal_lahir')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -86,7 +86,7 @@
                             <select wire:model.live="sertifikat_id" id="sertifikat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">Pilih Sertifikat</option>
                                 @foreach ($sertifikats as $sertifikat)
-                                    <option value="{{ $sertifikat->id }}">{{ $sertifikat->judul }}</option>
+                                    <option value="{{ $sertifikat->id }}">{{ $sertifikat->judul_program }}</option>
                                 @endforeach
                             </select>
 
@@ -112,7 +112,7 @@
                         <div class="mt-5">
                             <label for="no_sertifikat" class="block text-sm/6 font-medium text-gray-900">Nomor Sertifikat</label>
                             <div class="mt-2">
-                                <input wire:model="no_sertifikat" id="no_sertifikat" type="text" name="no_sertifikat" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                                <input wire:model="no_sertifikat" id="no_sertifikat" type="text" name="no_sertifikat" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                                 @error('no_sertifikat')
                                     <p class="text-xs text-red-600 dark:text-red-500">{{ $message }}</p>
                                 @enderror
@@ -240,7 +240,7 @@
                                     {{ $peserta->no_sertifikat }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $peserta->batch->sertifikat->judul }}
+                                    {{ $peserta->batch->sertifikat->judul_program }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $peserta->batch->kode_batch }}
@@ -252,8 +252,6 @@
                                     {{ $peserta->telepon }}
                                 </td>
                                 <td class="px-6 py-4">
-
-
                                     <a href="{{ route('sertifikat.download', ['no_sertifikat' => $peserta->no_sertifikat]) }}" class="px-3 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded hover:bg-yellow-100" target="_blank">
                                         Sertifikat
                                     </a>

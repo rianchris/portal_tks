@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Sertifikat;
 use App\Models\SertifikatDetail;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,27 +17,25 @@ class Sertifikats extends Component
     use WithFileUploads, WithPagination;
 
     // sertifikat
-    public $judul;
-    public $logo_kiri;
-    public $background;
-    // public $deskripsi_page1;
-    // public $deskripsi_page2;
-    public $nama_pejabat;
-    public $ttd_pejabat;
-    public $nama_jabatan;
+    public $jenis_sertifikat;
+    public $judul_program;
+    public $kode_program;
+    public $logo;
+    public $background_page_one;
+    public $background_page_two;
 
     // sertifikat detail
-    public $sertifikat_id;
+    // public $sertifikat_id;
     public $details = [];
-    public $unit_number = [];
-    public $unit_title = [];
+    // public $unit_number = [];
+    // public $unit_title = [];
 
     // untuk edit sertifikat
     public $editingSertifikatId = null;
     public $isEditing = false;
-    public $old_logo_kiri = null;
-    public $old_background = null;
-    public $old_ttd_pejabat = null;
+    public $old_logo = null;
+    public $old_background_page_one = null;
+    public $old_background_page_two = null;
 
     public $search = '';
 
@@ -48,130 +47,149 @@ class Sertifikats extends Component
     public function createNewSertifikat()
     {
         if ($this->isEditing) {
-            // Update logic here
             $validated = $this->validate([
-                'judul' => 'required|string|max:255',
-                // 'deskripsi_page1' => 'required|string',
-                // 'deskripsi_page2' => 'required|string',
-                'nama_pejabat' => 'required|string|max:255',
-                'nama_jabatan' => 'required|string|max:255',
+                'jenis_sertifikat'    => 'required|string|max:255',
+                'judul_program'       => 'required|string|max:255',
+                'kode_program'        => 'required|string|max:255',
+                'logo'                => 'nullable|image|max:5000',
+                'background_page_one' => 'nullable|image|max:5000',
+                'background_page_two' => 'nullable|image|max:5000',
             ]);
 
             $sertifikat = Sertifikat::findOrFail($this->editingSertifikatId);
 
-            if ($this->logo_kiri) {
-                $validated['logo_kiri'] = $this->logo_kiri->store('logo_kiri', 'public');
+            if ($this->logo) {
+                if ($sertifikat->logo) {
+                    Storage::disk('public')->delete($sertifikat->logo);
+                }
+                $validated['logo'] = $this->logo->store('logo', 'public');
+            } else {
+                unset($validated['logo']);
             }
 
-            if ($this->background) {
-                $validated['background'] = $this->background->store('background', 'public');
+            if ($this->background_page_one) {
+                if ($sertifikat->background_page_one) {
+                    Storage::disk('public')->delete($sertifikat->background_page_one);
+                }
+                $validated['background_page_one'] = $this->background_page_one->store('background_page_one', 'public');
+            } else {
+                unset($validated['background_page_one']);
             }
 
-            if ($this->ttd_pejabat) {
-                $validated['ttd_pejabat'] = $this->ttd_pejabat->store('ttd_pejabat', 'public');
+            if ($this->background_page_two) {
+                if ($sertifikat->background_page_two) {
+                    Storage::disk('public')->delete($sertifikat->background_page_two);
+                }
+                $validated['background_page_two'] = $this->background_page_two->store('background_page_two', 'public');
+            } else {
+                unset($validated['background_page_two']);
             }
 
             $sertifikat->update($validated);
 
-            // ambil semua id lama
             $existingIds = $sertifikat->details()->pluck('id')->toArray();
             $incomingIds = collect($this->details)->pluck('id')->filter()->toArray();
 
-            // hapus detail yang sudah dihapus di form
             $idsToDelete = array_diff($existingIds, $incomingIds);
             SertifikatDetail::whereIn('id', $idsToDelete)->delete();
 
-            // update & create
-            // dd($this->details);
             foreach ($this->details as $detail) {
-                $detailModel = SertifikatDetail::find($detail['id']);
-                if ($detailModel) {
-                    if (
-                        trim($detail['unit_number'] ?? '') !== '' &&
-                        trim($detail['unit_title'] ?? '') !== ''
-                    ) {
+                if (trim($detail['unit_number'] ?? '') === '' && trim($detail['unit_title'] ?? '') === '') {
+                    continue;
+                }
 
+                if (!empty($detail['id'])) {
+                    $detailModel = SertifikatDetail::find($detail['id']);
+                    if ($detailModel) {
                         $detailModel->update([
                             'unit_number' => $detail['unit_number'],
                             'unit_title'  => $detail['unit_title'],
                         ]);
-                    } else {
-                        $detailModel->delete();
                     }
+                } else {
+                    // New detail row added during edit
+                    $sertifikat->details()->create([
+                        'unit_number' => $detail['unit_number'],
+                        'unit_title'  => $detail['unit_title'],
+                    ]);
                 }
             }
 
-            // $this->reset(['name', 'email', 'role']); // untuk reset beberapa kolom saja
-            $this->reset(); // untuk reset semua inputan
-            // $this->search = ''; // reset search juga
+            $this->resetForm();
             session()->flash('success', 'Sertifikat updated successfully!');
         } else {
-            // Create logic here
             $validated = $this->validate([
-                'judul' => 'required|string|max:255',
-                'logo_kiri' => 'image|max:1000',
-                'background' => 'image|max:1000',
-                // 'deskripsi_page1' => 'required|string',
-                // 'deskripsi_page2' => 'required|string',
-                'nama_pejabat' => 'required|string|max:255',
-                'ttd_pejabat' => 'image|max:1000',
-                'nama_jabatan' => 'required|string|max:255',
+                'jenis_sertifikat'    => 'required|string|max:255',
+                'judul_program'       => 'required|string|max:255',
+                'kode_program'        => 'required|string|max:255',
+                'logo'                => 'nullable|image|max:5000',
+                'background_page_one' => 'nullable|image|max:5000',
+                'background_page_two' => 'nullable|image|max:5000',
             ]);
 
-            if ($this->logo_kiri) {
-                $validated['logo_kiri'] = $this->logo_kiri->store('logo_kiri', 'public');
+            if ($this->logo) {
+                $validated['logo'] = $this->logo->store('logo', 'public');
             }
-
-            if ($this->background) {
-                $validated['background'] = $this->background->store('background', 'public');
+            if ($this->background_page_one) {
+                $validated['background_page_one'] = $this->background_page_one->store('background_page_one', 'public');
             }
-
-            if ($this->ttd_pejabat) {
-                $validated['ttd_pejabat'] = $this->ttd_pejabat->store('ttd_pejabat', 'public');
+            if ($this->background_page_two) {
+                $validated['background_page_two'] = $this->background_page_two->store('background_page_two', 'public');
             }
 
             $sertifikat = Sertifikat::create($validated);
 
             foreach ($this->details as $detail) {
-
                 if (empty($detail['unit_number']) && empty($detail['unit_title'])) {
                     continue;
                 }
-
                 $sertifikat->details()->create([
                     'unit_number' => $detail['unit_number'],
                     'unit_title'  => $detail['unit_title'],
                 ]);
             }
-            // $this->reset(['name', 'email', 'role']); // untuk reset beberapa kolom saja
-            $this->reset(); // untuk reset semua inputan
-            $this->search = ''; // reset search juga
+
+            $this->resetForm();
             session()->flash('success', 'Saved successfully!');
         }
     }
 
     public function cancelEdit()
     {
-        $this->editingSertifikatId = null;
-        $this->old_background = null;
-        $this->old_logo_kiri = null;
-        $this->old_ttd_pejabat = null;
-        $this->isEditing = false;
+        $this->resetForm();
+    }
+
+    // ✅ Centralized reset — always reinitializes the 16-row details array
+    private function resetForm()
+    {
         $this->reset();
+        $this->initDetails();
+    }
+
+    private function initDetails()
+    {
+        $this->details = collect(range(1, 16))->map(fn() => [
+            'id'          => null,
+            'unit_number' => '',
+            'unit_title'  => '',
+        ])->toArray();
+    }
+
+    public function mount()
+    {
+        $this->initDetails();
     }
 
     public function editSertifikat($sertifikatId)
     {
         $sertifikat = Sertifikat::findOrFail($sertifikatId);
         $this->editingSertifikatId = $sertifikatId;
-        $this->judul = $sertifikat->judul;
-        // $this->deskripsi_page1 = $sertifikat->deskripsi_page1;
-        // $this->deskripsi_page2 = $sertifikat->deskripsi_page2;
-        $this->nama_pejabat = $sertifikat->nama_pejabat;
-        $this->nama_jabatan = $sertifikat->nama_jabatan;
-        $this->old_logo_kiri = $sertifikat->logo_kiri;
-        $this->old_background = $sertifikat->background;
-        $this->old_ttd_pejabat = $sertifikat->ttd_pejabat;
+        $this->jenis_sertifikat = $sertifikat->jenis_sertifikat;
+        $this->judul_program = $sertifikat->judul_program;
+        $this->kode_program = $sertifikat->kode_program;
+        $this->old_logo = $sertifikat->logo;
+        $this->old_background_page_one = $sertifikat->background_page_one;
+        $this->old_background_page_two = $sertifikat->background_page_two;
         $this->isEditing = true;
 
         $this->details = $sertifikat->details->map(function ($detail) {
@@ -189,35 +207,28 @@ class Sertifikats extends Component
                 'unit_title' => '',
             ];
         }
-        // $this->unit_number = $sertifikat->details->pluck('unit_number')->toArray();
-        // $this->unit_title = $sertifikat->details->pluck('unit_title')->toArray();
-        session()->flash('info', 'Editing sertifikat: ' . $sertifikat->judul);
+        session()->flash('info', 'Editing sertifikat: ' . $sertifikat->judul_program);
     }
 
     public function deleteSertifikat($sertifikatId)
     {
-        Sertifikat::findOrFail($sertifikatId)->delete();
-        session()->flash('success', 'Sertifikat deleted successfully!');
-    }
+        $sertifikat = Sertifikat::findOrFail($sertifikatId);
 
-    public function mount()
-    {
-        if (empty($this->details)) {
-            $this->details = collect(range(1, 16))->map(function () {
-                return [
-                    'id' => null,
-                    'unit_number' => '',
-                    'unit_title' => '',
-                ];
-            })->toArray();
+        foreach (['logo', 'background_page_one', 'background_page_two'] as $field) {
+            if ($sertifikat->$field) {
+                Storage::disk('public')->delete($sertifikat->$field);
+            }
         }
+
+        $sertifikat->delete();
+        session()->flash('success', 'Sertifikat deleted successfully!');
     }
 
     public function render()
     {
         $query = Sertifikat::latest();
         if ($this->search) {
-            $query->where('judul', 'like', '%' . $this->search . '%');
+            $query->where('judul_program', 'like', '%' . $this->search . '%');
         }
 
         $data = [
